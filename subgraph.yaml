@@ -1,0 +1,32 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Market
+    network: mumbai
+    source:
+      address: "0x9eB55e708ea84C980C0ee3dA8B36148bFD8696BA"
+      abi: Market
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - AuctionCreated
+        - BidCreated
+        - NFTClaimed
+        - Withdraw
+      abis:
+        - name: Market
+          file: ./abis/Market.json
+      eventHandlers:
+        - event: AuctionCreated(indexed uint256,indexed address,indexed uint256,address,uint256,uint256)
+          handler: handleAuctionCreated
+        - event: BidCreated(indexed uint256,uint256,address,uint256)
+          handler: handleBidCreated
+        - event: NFTClaimed(indexed uint256,address)
+          handler: handleNFTClaimed
+        - event: Withdraw(indexed uint256,address,uint256)
+          handler: handleWithdraw
+      file: ./src/mapping.ts
