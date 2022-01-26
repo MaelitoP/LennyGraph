@@ -1,4 +1,6 @@
 specVersion: 0.0.2
+description: LennyVerse Graph 
+repository: https://github.com/MaelitoP/LennyGraph
 schema:
   file: ./schema.graphql
 dataSources:
