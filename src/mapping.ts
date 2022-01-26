@@ -1,71 +1,25 @@
-import { BigInt } from "@graphprotocol/graph-ts"
 import {
-  Market,
-  AuctionCreated,
-  BidCreated,
-  NFTClaimed,
-  Withdraw
-} from "../generated/Market/Market"
-import { ExampleEntity } from "../generated/schema"
+  Market as MarketToken,
+  AuctionCreated as AuctionCreatedEvent,
+} from '../generated/Market/Market'
 
-export function handleAuctionCreated(event: AuctionCreated): void {
-  // Entities can be loaded from the store using a string ID; this ID
-  // needs to be unique across all entities of the same type
-  let entity = ExampleEntity.load(event.transaction.from.toHex())
+import { Token, User } from '../generated/schema'
 
-  // Entities only exist after they have been saved to the store;
-  // `null` checks allow to create entities on demand
-  if (!entity) {
-    entity = new ExampleEntity(event.transaction.from.toHex())
+export function handleAuctionCreated(event: AuctionCreatedEvent): void {
+  let token = Token.load(event.params.tokenId.toString())
 
-    // Entity fields can be set using simple assignments
-    entity.count = BigInt.fromI32(0)
+  if (!token) {
+    token = new Token(event.params.tokenId.toString())
+    token.tokenID = event.params.tokenId
+    token.tokenContract = event.params.nftContract.toHexString()
+    token.createdAtTimestamp = event.block.timestamp
   }
+  token.owner = event.params.owner.toHexString()
+  token.save()
 
-  // BigInt and BigDecimal math are supported
-  entity.count = entity.count + BigInt.fromI32(1)
-
-  // Entity fields can be set based on event parameters
-  entity.AuctionId = event.params.AuctionId
-  entity.nftContract = event.params.nftContract
-
-  // Entities can be written to the store with `.save()`
-  entity.save()
-
-  // Note: If a handler doesn't require existing field values, it is faster
-  // _not_ to load the entity from the store. Instead, create it fresh with
-  // `new Entity(...)`, set the fields that should be updated and save the
-  // entity back to the store. Fields that were not set or unset remain
-  // unchanged, allowing for partial updates to be applied.
-
-  // It is also possible to access smart contracts from mappings. For
-  // example, the contract that has emitted the event can be connected to
-  // with:
-  //
-  // let contract = Contract.bind(event.address)
-  //
-  // The following functions can then be called on this contract to access
-  // state variables and other data:
-  //
-  // - contract.AuctiontoInfo(...)
-  // - contract.AuctiontoNFT(...)
-  // - contract.BuyerAuction(...)
-  // - contract.ERC721Address(...)
-  // - contract.ExistingAuctions(...)
-  // - contract.NFTtoInfo(...)
-  // - contract.createAuction(...)
-  // - contract.createAuctionERC721(...)
-  // - contract.doscAdd(...)
-  // - contract.getAllNFT(...)
-  // - contract.lastAuthorizedAddress(...)
-  // - contract.lastChangingTime(...)
-  // - contract.maxPrice(...)
-  // - contract.tokenAdd(...)
-  // - contract.totalAuctions(...)
+  let user = User.load(event.params.owner.toHexString())
+  if (!user) {
+    user = new User(event.params.owner.toHexString())
+    user.save()
+  }
 }
-
-export function handleBidCreated(event: BidCreated): void {}
-
-export function handleNFTClaimed(event: NFTClaimed): void {}
-
-export function handleWithdraw(event: Withdraw): void {}

@@ -1,6 +1,6 @@
 specVersion: 0.0.2
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum
     name: Market
@@ -18,8 +18,9 @@ dataSources:
         - User
       abis:
         - name: Market
-          file: ./abis/Market.json
+          file: Market\abis\Market.json
       eventHandlers:
-        - event: AuctionCreated(indexed uint256,indexed address,indexed uint256,address,uint256,uint256)
+        - event: AuctionCreated(indexed uint256,indexed address,indexed
+            uint256,address,uint256,uint256)
           handler: handleAuctionCreated
-      file: ./src/mapping.ts
+      file: Market\Market.wasm
