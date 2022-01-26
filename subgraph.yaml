@@ -44,6 +44,8 @@ dataSources:
           handler: handleRemovalConfirmed
         - event: TokenClaimedConfirmed(address,uint256)
           handler: handleClaimedConfirmed
+        - event: ContributionConfirmed(address,uint256)
+          handler: handleContributionConfirmed
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: Lenny
