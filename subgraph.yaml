@@ -2,7 +2,7 @@ specVersion: 0.0.2
 schema:
   file: ./schema.graphql
 dataSources:
-  - kind: ethereum
+  - kind: ethereum/contract
     name: Market
     network: mumbai
     source:
@@ -22,4 +22,66 @@ dataSources:
       eventHandlers:
         - event: AuctionCreated(indexed uint256,indexed address,indexed uint256,address,uint256,uint256)
           handler: handleAuctionCreated
+      file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: CommunityIDO
+    network: mumbai
+    source:
+      address: "0x16c8e9d4a85ACa82D1DED530657F7E77D15BFf8B"
+      abi: CommunityIDO
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Token
+        - User
+      abis:
+        - name: CommunityIDO
+          file: ./abis/CommunityIDO.json
+      eventHandlers:
+        - event: RemovalConfirmed(address,uint256)
+          handler: handleRemovalConfirmed
+        - event: TokenClaimedConfirmed(address,uint256)
+          handler: handleClaimedConfirmed
+      file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: Lenny
+    network: mumbai
+    source:
+      address: "0xeF52133D5a58DB4a786AcD9abda44a6E9C55e0Ad"
+      abi: Lenny
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Token
+        - User
+      abis:
+        - name: Lenny
+          file: ./abis/Lenny.json
+      callHandlers:
+        - function: approve(address,uint256)
+          handler: handleApprove
+      file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: LennyNFT
+    network: mumbai
+    source:
+      address: "0xf89Ae1cd588c753D7c7B8a109aC31a0563bA14b0"
+      abi: LennyNFT
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Token
+        - User
+      abis:
+        - name: LennyNFT
+          file: ./abis/LennyNFT.json
+      callHandlers:
+        - function: transferFrom(address,address,uint256)
+          handler: handleTransferFrom
       file: ./src/mapping.ts
