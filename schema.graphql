@@ -1,12 +1,55 @@
-type Token @entity {
+type ERC721Token @entity {
+  # internal ID used for indexation
   id: ID!
+
+  #
   tokenID: BigInt!
-  tokenContract: String!
-  createdAtTimestamp: BigInt!
+
+  #
+  tokenURI: String!
+
+  # current token owner
   owner: User!
+
+  # nft creator
+  creator: Artist!
+
+  # token's related Collection
+  collection: Collection!
+}
+
+type Artist @entity {
+  # internal ID used for indexation
+  id: ID!
+
+  # number of authorized NFT
+  nftNumber: BigInt!
+
+  # user reference
+  user: User!
 }
 
 type User @entity {
+  # internal ID used for indexation
   id: ID!
-  tokens: [Token!]! @derivedFrom(field: "owner")
+
+  # account address
+  address: Bytes!
+
+  # account balance
+  balance: BigInt!
+
+  # owned ERC720 tokens on Lenny Metaverse
+  tokens: [ERC721Token!]! @derivedFrom(field: "owner")
+}
+
+type Collection @entity {
+  # internal ID used for indexation
+  id: ID!
+
+  # artists in this collection
+  artists: [Artist!]! @derivedFrom(field: "user")
+
+  # tokens minted for this collection
+  tokens: [Token!] @derivedFrom(field: "collection")
 }
