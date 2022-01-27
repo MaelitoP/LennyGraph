@@ -11,7 +11,7 @@ type ERC721Token @entity {
   # current token owner
   owner: User!
 
-  # nft creator
+  # NFT's creator
   creator: Artist!
 
   # token's related Collection
@@ -33,7 +33,7 @@ type User @entity {
   # internal ID used for indexation
   id: ID!
 
-  # account address
+  # account evm address
   address: Bytes!
 
   # account balance
@@ -48,8 +48,8 @@ type Collection @entity {
   id: ID!
 
   # artists in this collection
-  artists: [Artist!]! @derivedFrom(field: "user")
+  artists: [Artist!]!
 
   # tokens minted for this collection
-  tokens: [Token!] @derivedFrom(field: "collection")
+  tokens: [ERC721Token!] @derivedFrom(field: "collection")
 }
