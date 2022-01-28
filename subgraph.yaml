@@ -37,7 +37,7 @@ dataSources:
   #     address: "0x16c8e9d4a85ACa82D1DED530657F7E77D15BFf8B"
   #     abi: CommunityIDO
   #   mapping:
-  #     kind: ethereum/events
+  #     kind: ethereum/events v
   #     apiVersion: 0.0.5
   #     language: wasm/assemblyscript
   #     entities:
