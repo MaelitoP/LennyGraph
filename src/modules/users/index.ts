@@ -1,5 +1,5 @@
 import { Bytes } from '@graphprotocol/graph-ts'
-import { User } from '../../../generated/schema'
+import { User, Artist } from '../../../generated/schema'
 
 export namespace users {
   /**
@@ -8,13 +8,21 @@ export namespace users {
    * @returns @type {User}
    */
   export function getUser(userAddress: Bytes): User {
-    let accountId = userAddress.toHex()
+    let userId = userAddress.toHex()
 
-    let user = User.load(accountId)
+    let user = User.load(userId)
     if (user === null) {
-      user = new User(accountId)
+      user = new User(userId)
       user.address = userAddress
     }
+
+    return user as User
+  }
+
+  export function setUserAsArtist(userAddress: Bytes): User {
+    let user = getUser(userAddress)
+
+    user.isArtist = true
 
     return user as User
   }

@@ -95,7 +95,7 @@ dataSources:
       callHandlers:
         - function: transferFrom(address,address,uint256)
           handler: handleTransferFrom
-        - function: addArtist(address,uint)
+        - function: addArtist(address,uint256)
           handler: handleAddArtist
         - function: setTokenURI(uint256,string)
           handler: handleSetTokenURI

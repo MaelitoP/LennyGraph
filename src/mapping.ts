@@ -1,25 +1,31 @@
 import {
-  Market as MarketToken,
-  AuctionCreated as AuctionCreatedEvent,
-} from '../generated/Market/Market'
+  SetTokenURICall,
+  AddArtistCall,
+} from './../generated/LennyNFT/LennyNFT'
+import { AuctionCreated as AuctionCreatedEvent } from '../generated/Market/Market'
 
-import { Token, User } from '../generated/schema'
+import { users, tokens } from './modules'
 
 export function handleAuctionCreated(event: AuctionCreatedEvent): void {
-  let token = Token.load(event.params.tokenId.toString())
+  let ownerAddress = event.params.owner
+}
 
-  if (!token) {
-    token = new Token(event.params.tokenId.toString())
-    token.tokenID = event.params.tokenId
-    token.tokenContract = event.params.nftContract.toHexString()
-    token.createdAtTimestamp = event.block.timestamp
-  }
-  token.owner = event.params.owner.toHexString()
+/**
+ * Update {@link ERC721Token entity} URI
+ * @param _ {@link SetTokenURICall} inputs
+ */
+export function handleSetTokenURI(_: SetTokenURICall): void {
+  let tokenId = _.inputs.tokenId
+
+  let token = tokens.getERC721Token(tokenId.toHex())
   token.save()
+}
 
-  let user = User.load(event.params.owner.toHexString())
-  if (!user) {
-    user = new User(event.params.owner.toHexString())
-    user.save()
-  }
+/**
+ * Update isArtist field to true of User entity
+ * @param _ {@link AddArtistCall} inputs
+ */
+export function handleAddArtist(_: AddArtistCall): void {
+  let user = users.setUserAsArtist(_.inputs.newAddress)
+  user.save()
 }
