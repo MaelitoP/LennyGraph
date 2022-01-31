@@ -86,9 +86,7 @@ dataSources:
       abis:
         - name: LennyNFT
           file: ./abis/LennyNFT.json
-      callHandlers:
-        - function: addArtist(address,uint256)
-          handler: handleAddArtist
-        - function: setTokenURI(uint256,string)
-          handler: handleSetTokenURI
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
       file: ./src/mapping.ts
