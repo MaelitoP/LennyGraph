@@ -1,12 +1,115 @@
-type Token @entity {
+type ERC721Token @entity {
+  # internal ID used for indexation
   id: ID!
-  tokenID: BigInt!
-  tokenContract: String!
-  createdAtTimestamp: BigInt!
+
+  #
+  tokenId: BigInt!
+
+  #
+  tokenUri: String!
+
+  # token evm address
+  address: Bytes!
+
+  # current token owner
   owner: User!
+
+  # NFT's creator
+  creator: Artist!
+
+  # token's related collection
+  collection: Collection!
+
+  #
+  transfers: [Transfer!]! @derivedFrom(field: "token")
+}
+
+type Artist @entity {
+  # internal ID used for indexation
+  id: ID!
+
+  # all ERC721 tokens created
+  tokensCreated: [ERC721Token!]! @derivedFrom(field: "creator")
+
+  # user reference
+  user: User!
 }
 
 type User @entity {
+  # internal ID used for indexation
   id: ID!
-  tokens: [Token!]! @derivedFrom(field: "owner")
+
+  # account evm address
+  address: Bytes!
+
+  # account balance
+  balance: BigInt!
+
+  # is an artist account
+  isArtist: Boolean!
+
+  # owned ERC720 tokens on Lenny Metaverse
+  tokens: [ERC721Token!]! @derivedFrom(field: "owner")
+}
+
+type Collection @entity {
+  # internal ID used for indexation
+  id: ID!
+
+  # artists in this collection
+  artists: [Artist!]!
+
+  # tokens minted for this collection
+  tokens: [ERC721Token!] @derivedFrom(field: "collection")
+}
+
+interface Event {
+  # internal ID used for indexation
+  id: ID!
+
+  #
+  transaction: Transaction!
+
+  #
+  emitter: User!
+
+  #
+  timestamp: BigInt!
+}
+
+type Transfer implements Event @entity {
+  # internal ID used for indexation
+  id: ID!
+
+  #
+  emitter: User!
+
+  #
+  transaction: Transaction!
+
+  #
+  timestamp: BigInt!
+
+  #
+  token: ERC721Token!
+
+  #
+  from: User!
+
+  #
+  to: User!
+}
+
+type Transaction @entity {
+  # internal ID used for indexation
+  id: ID!
+
+  #
+  timestamp: BigInt!
+
+  #
+  blockNumber: BigInt!
+
+  #
+  events: [Event!]! @derivedFrom(field: "transaction")
 }

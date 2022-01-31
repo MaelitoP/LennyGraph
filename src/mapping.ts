@@ -6,8 +6,18 @@ import { AuctionCreated as AuctionCreatedEvent } from '../generated/Market/Marke
 
 import { users, tokens } from './modules'
 
+/**
+ *
+ * @param event
+ */
 export function handleAuctionCreated(event: AuctionCreatedEvent): void {
-  let ownerAddress = event.params.owner
+  let tokenId = event.params.tokenId.toString()
+  let token = tokens.getERC721Token(tokenId)
+  token.address = event.params.nftContract
+
+  if (event.params.owner) token.owner = event.params.owner.toHex()
+
+  token.save()
 }
 
 /**

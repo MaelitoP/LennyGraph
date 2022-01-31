@@ -8,6 +8,9 @@ type ERC721Token @entity {
   #
   tokenUri: String!
 
+  # token evm address
+  address: Bytes!
+
   # current token owner
   owner: User!
 

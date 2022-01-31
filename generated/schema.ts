@@ -18,6 +18,7 @@ export class ERC721Token extends Entity {
 
     this.set("tokenId", Value.fromBigInt(BigInt.zero()));
     this.set("tokenUri", Value.fromString(""));
+    this.set("address", Value.fromBytes(Bytes.empty()));
     this.set("owner", Value.fromString(""));
     this.set("creator", Value.fromString(""));
     this.set("collection", Value.fromString(""));
@@ -65,6 +66,15 @@ export class ERC721Token extends Entity {
 
   set tokenUri(value: string) {
     this.set("tokenUri", Value.fromString(value));
+  }
+
+  get address(): Bytes {
+    let value = this.get("address");
+    return value!.toBytes();
+  }
+
+  set address(value: Bytes) {
+    this.set("address", Value.fromBytes(value));
   }
 
   get owner(): string {

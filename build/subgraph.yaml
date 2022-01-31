@@ -1,8 +1,10 @@
 specVersion: 0.0.2
+description: LennyVerse Graph
+repository: https://github.com/MaelitoP/LennyGraph
 schema:
   file: schema.graphql
 dataSources:
-  - kind: ethereum
+  - kind: ethereum/contract
     name: Market
     network: mumbai
     source:
@@ -14,8 +16,10 @@ dataSources:
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - Token
+        - ERC721Token
         - User
+        - Artist
+        - Collection
       abis:
         - name: Market
           file: Market\abis\Market.json
@@ -23,4 +27,33 @@ dataSources:
         - event: AuctionCreated(indexed uint256,indexed address,indexed
             uint256,address,uint256,uint256)
           handler: handleAuctionCreated
+      callHandlers:
+        - function: createAuctionERC721(address,address,uint256,uint256,uint256)
+          handler: handleCreateAuctionERC721
+      file: Market\Market.wasm
+  - kind: ethereum/contract
+    name: LennyNFT
+    network: mumbai
+    source:
+      address: "0xf89Ae1cd588c753D7c7B8a109aC31a0563bA14b0"
+      abi: LennyNFT
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - ERC721Token
+        - User
+        - Artist
+        - Collection
+      abis:
+        - name: LennyNFT
+          file: LennyNFT\abis\LennyNFT.json
+      callHandlers:
+        - function: transferFrom(address,address,uint256)
+          handler: handleTransferFrom
+        - function: addArtist(address,uint256)
+          handler: handleAddArtist
+        - function: setTokenURI(uint256,string)
+          handler: handleSetTokenURI
       file: Market\Market.wasm
