@@ -11,7 +11,7 @@ import {
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
-export class ERC721Token extends Entity {
+export class NFT extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -26,19 +26,19 @@ export class ERC721Token extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save ERC721Token entity without an ID");
+    assert(id != null, "Cannot save NFT entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save ERC721Token entity with non-string ID. " +
+        "Cannot save NFT entity with non-string ID. " +
           'Considering using .toHex() to convert the "id" to a string.'
       );
-      store.set("ERC721Token", id.toString(), this);
+      store.set("NFT", id.toString(), this);
     }
   }
 
-  static load(id: string): ERC721Token | null {
-    return changetype<ERC721Token | null>(store.get("ERC721Token", id));
+  static load(id: string): NFT | null {
+    return changetype<NFT | null>(store.get("NFT", id));
   }
 
   get id(): string {

@@ -1,4 +1,4 @@
-type ERC721Token @entity {
+type NFT @entity {
   # internal ID used for indexation
   id: ID!
 
@@ -29,7 +29,7 @@ type Artist @entity {
   id: ID!
 
   # all ERC721 tokens created
-  tokensCreated: [ERC721Token!]! @derivedFrom(field: "creator")
+  tokensCreated: [NFT!]! @derivedFrom(field: "creator")
 
   # user reference
   user: User!
@@ -49,7 +49,7 @@ type User @entity {
   isArtist: Boolean!
 
   # owned ERC720 tokens on Lenny Metaverse
-  tokens: [ERC721Token!]! @derivedFrom(field: "owner")
+  tokens: [NFT!]! @derivedFrom(field: "owner")
 }
 
 type Collection @entity {
@@ -60,7 +60,7 @@ type Collection @entity {
   artists: [Artist!]!
 
   # tokens minted for this collection
-  tokens: [ERC721Token!] @derivedFrom(field: "collection")
+  tokens: [NFT!] @derivedFrom(field: "collection")
 }
 
 interface Event {
@@ -91,7 +91,7 @@ type Transfer implements Event @entity {
   timestamp: BigInt!
 
   #
-  token: ERC721Token!
+  token: NFT!
 
   #
   from: User!

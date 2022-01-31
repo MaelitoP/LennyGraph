@@ -16,10 +16,8 @@ dataSources:
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - ERC721Token
+        - NFT
         - User
-        - Artist
-        - Collection
       abis:
         - name: Market
           file: Market\abis\Market.json
@@ -27,9 +25,6 @@ dataSources:
         - event: AuctionCreated(indexed uint256,indexed address,indexed
             uint256,address,uint256,uint256)
           handler: handleAuctionCreated
-      callHandlers:
-        - function: createAuctionERC721(address,address,uint256,uint256,uint256)
-          handler: handleCreateAuctionERC721
       file: Market\Market.wasm
   - kind: ethereum/contract
     name: LennyNFT
@@ -37,21 +32,18 @@ dataSources:
     source:
       address: "0xf89Ae1cd588c753D7c7B8a109aC31a0563bA14b0"
       abi: LennyNFT
+      startBlock: 24068756
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - ERC721Token
+        - NFT
         - User
-        - Artist
-        - Collection
       abis:
         - name: LennyNFT
           file: LennyNFT\abis\LennyNFT.json
       callHandlers:
-        - function: transferFrom(address,address,uint256)
-          handler: handleTransferFrom
         - function: addArtist(address,uint256)
           handler: handleAddArtist
         - function: setTokenURI(uint256,string)
