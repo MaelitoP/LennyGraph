@@ -16,8 +16,9 @@ export function handleAuctionCreated(event: AuctionCreatedEvent): void {
   let token = tokens.getERC721Token(tokenId)
 
   token.address = event.params.nftContract
-  if (event.params.owner) token.owner = event.params.owner.toHex()
-
+  if (event.params.owner) {
+    token.owner = event.params.owner.toHex()
+  }
   token.save()
 }
 
@@ -27,6 +28,9 @@ export function handleAuctionCreated(event: AuctionCreatedEvent): void {
  */
 export function handleTransfer(event: TransferEvent): void {
   let token = tokens.getERC721Token(event.params.tokenId.toString())
-  token.owner = event.params.to.toHex()
+  let user = users.getUser(event.params.to)
+  token.owner = user.address.toString()
+
   token.save()
+  user.save()
 }

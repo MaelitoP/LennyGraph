@@ -3,9 +3,6 @@ type NFT @entity {
   id: ID!
 
   #
-  tokenId: BigInt!
-
-  #
   tokenUri: String!
 
   # token evm address
